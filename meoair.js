@@ -319,8 +319,7 @@ var paint = (path, session, mode, Continue) => {
         }
         if (!err) {
             pixelsData = pixels.data;
-            session.tellraw("§cActivate The Paint Function...");
-            session.tellraw("§bPicture Loading...");
+            session.tellraw("§bLoading image...");
             var paintWidth = pixels.shape[0];
             var paintLength = pixels.shape[1];
             var pixelsData1 = [];
@@ -361,7 +360,7 @@ var paint = (path, session, mode, Continue) => {
         }
     })
 }
-paint.connect = "Script Paint Loading..."
+paint.connect = "Paint script is loading..."
 //--------------------------------
 var rp=[],rptop=0;
 function rpadd(addstring){
@@ -422,7 +421,7 @@ function nodplist(session){
         liststr=liststr+nodp[i]+" ";
     session.sendCommand(`say ${liststr}`,()=>{});
 }
-const MeoWS=require('meowslib');
+const MeoWS=require('./lib');
 const WSServer = MeoWS.WSServer;
 const BuildSession = MeoWS.BuildSession;
 let wss = new WSServer(23333);
@@ -497,12 +496,13 @@ function userfind(userstring){
             return 1;
     return 0;
 }*/
-wss.on('client', (session, request) => {
+wss.on('client', async (session, request) => {
+	await new Promise((d)=>{setTimeout(d,1000);});
 	console.log(`FastBuilder AirAL by dongdeng`);
 	session.tellraw('AirAL CTD');
 	BuildSession.createAndBind(session);
 	session.on('onMessage',(msg, player)=>{
-        var tick=msg.split(" ");
+        let tick=msg.split(" ");
 		if(tick[0]=="#get"){
 			if(tick[1]=="pos")
 				session.sendCommand("testforblock ~~~ air",(back)=>{

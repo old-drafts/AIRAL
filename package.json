@@ -1,0 +1,29 @@
+{
+  "name": "airal",
+  "version": "0.0.1",
+  "description": "The next generation structure builder",
+  "main": "meoair.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cpp-dongdeng/AIRAL.git"
+  },
+  "keywords": [
+    "mincraft",
+    "mcpe"
+  ],
+  "author": "Lampese",
+  "license": "SEE LICENSE IN nowhere",
+  "bugs": {
+    "url": "https://github.com/cpp-dongdeng/AIRAL/issues"
+  },
+  "homepage": "https://github.com/cpp-dongdeng/AIRAL#readme",
+  "dependencies": {
+    "async-limiter": "^2.0.0",
+    "get-pixels": "^3.3.2",
+    "mc-schematic": "^2.0.0",
+    "ws": "^7.2.1"
+  }
+}
