@@ -1,4 +1,5 @@
 const getPixels = require('get-pixels');
+var x=0,y=0,z=0,block="unknow";
 //-------------------------------------------------
 var pashe=1;
 var colorLibrary= [
@@ -485,7 +486,6 @@ var schematic = (schep, session) => {
     })
 }
 schematic.connect = "Loading... "
-var x=0,y=0,z=0,block="unknow";
 /*var user=[],usertrue=false;
 user[0]="YI哥";
 user[1]="我就喜欢柠檬";
@@ -496,6 +496,8 @@ function userfind(userstring){
             return 1;
     return 0;
 }*/
+var ex1,ey1,ez1;
+var ex2,ey2,ez2;
 wss.on('client', async (session, request) => {
 	await new Promise((d)=>{setTimeout(d,1000);});
 	console.log(`FastBuilder AirAL by dongdeng`);
@@ -514,7 +516,23 @@ wss.on('client', async (session, request) => {
 			else if(tick[1]=="block")
 				session.tellraw(`AirAL.block:${block}`);
 			else if(tick[1]=="nowpos")
-			session.tellraw(`AirAL.nowpos:${x},${y},${z}`);
+                session.tellraw(`AirAL.nowpos:${x},${y},${z}`);
+            else if(tick[1]=="expos-1"){
+                session.sendCommand("testforblock ~~~ air",(back)=>{
+					ex1=back.position.x;
+					ey1=back.position.y;
+					ez1=back.position.z;
+					session.tellraw(`AirAL.e1:${ex1},${ey1},${ez1}`);
+				});
+            }
+            else if(tick[1]=="expos-2"){
+                session.sendCommand("testforblock ~~~ air",(back)=>{
+					ex2=back.position.x;
+					ey2=back.position.y;
+					ez2=back.position.z;
+					session.tellraw(`AirAL.e2:${ex2},${ey2},${ez2}`);
+				});
+            }
 		}
 		else if(tick[0]=="#set"){
 			 	if(tick[1]=="block"){
@@ -583,6 +601,31 @@ wss.on('client', async (session, request) => {
 		else if(tick[0]=="#paint"){
 			let pash=msg.substring(7,msg.length);
 			paint(pash,session,'normal');
+        }
+        else if(tick[0]=="#ex"){
+            var ur=tick[1];
+            let qx=x,qy=y,qz=z,bl=0;
+            for(let x=ex1;(ex2>ex1)?x<=ex2:x>=ex2;(ex2>ex1)?x++:x--)
+				for(let y=ey1;(ey2>ey1)?y<=ey2:y>=ey2;(ey2>ey1)?y++:y--)
+				    for(let z=ez1;(ez2>ez1)?z<=ez2:z>=ez2;(ez2>ez1)?z++:z--){
+                        session.sendCommand(`testforblock ${x} ${y} ${z} air`,(back)=>{
+                            let adb=back.statusMessage.split("的方块")[1];
+                            if(adb=="。"){}
+                            else{let ads=`${qx-back.position.x} ${qy-back.position.y} ${qz-back.position.z} ${adb}\n`;
+                            fs.appendFile(ur,ads,'utf-8',function(err) {
+                                if(err) {
+                                    console.log(err);
+                                    return false;
+                                }
+                            })};
+                        })
+                    }
+            session.tellraw("done");
+        }
+        else if(tick[0]=="#eval"){
+            eval(msg.substring(5,100));
+            console.log("od");
+            session.sendCommand("say od",()=>{});
         }
 	});
 });
